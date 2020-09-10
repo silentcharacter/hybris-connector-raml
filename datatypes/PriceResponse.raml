@@ -1,0 +1,9 @@
+#%RAML 1.0 DataType
+
+type: object
+displayName: Price Response
+properties:
+  productPriceResponses:
+    type: array
+    items:
+      type: !include ProductPriceResponse.raml

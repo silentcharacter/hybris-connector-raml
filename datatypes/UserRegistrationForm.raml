@@ -1,0 +1,25 @@
+#%RAML 1.0 DataType
+
+type: object
+properties:
+  registrationStatus: string
+  salutation?: string
+  firstName: string
+  lastName: string
+  email: string
+  jobTitle?: string
+  companyName?: string
+  streetAddress1?: string
+  streetAddress2?: string
+  city?: string
+  country?:
+    type: object
+    properties:
+      isoCode: string
+      name: string
+  state?: string
+  telephone?: string
+  phoneExtension?: string
+  zipCode?: string
+  lastCommerceUpdate: datetime
+  bpUnitId?: string

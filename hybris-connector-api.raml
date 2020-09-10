@@ -1,0 +1,445 @@
+#%RAML 1.0
+baseUri: https://anypoint.mulesoft.com/mocking/api/v1/links/ea41d06a-8ffb-4f34-bd4b-a91bcbc580dd/ #
+title: Hybris Connector API
+version: v1
+mediaType: application/json
+description: Hybris Connector API is an interface of a middleware app fulfilling data synchronization between Sage X3 ERP and SAP Commerce (Hybris)
+
+documentation:
+  - title: Hybris Connector API
+    content: |
+      Hybris Connector API is responsable for data synchronization between Sage X3 ERP and SAP Commerce (Hybris)
+
+      - The POST /products resource:
+        - Endpoint executing products import to Hybris. After fetching all related products from Sage X3 DB 200 response is returned. Data transformation into CSV format is done asynchronously. Result files are sent to Hybris hotfolder.
+      - The POST /products/{ID} resource:
+        - Endpoint accepting product update notification. Product {ID} is the only required input. In case if product is found in Sage DB method returns 200 response. Data related to specified product is sent to Hybris synchronously.
+      - The POST /prices resource:
+        - Endpoint executing prices import to Hybris. After fetching all related prices from Sage X3 DB 200 response is returned. Data transformation into CSV format is done asynchronously. Result files are sent to Hybris hotfolder.
+      - The POST /contacts resource:
+        - Endpoint executing contacts import to Hybris. After fetching all contacts from Sage X3 DB 200 response is returned. Data transformation into CSV format is done asynchronously. Result files are sent to Hybris hotfolder.
+      - The POST /contacts/{CODE} resource:
+        - Endpoint accepting contact update notification. Contact {CODE} is the only required input. In case if contact is found in Sage DB method returns 200 response. Data related to specified contact is sent to Hybris synchronously.
+      - The POST /customers resource:
+        - Endpoint executing customers import to Hybris. After fetching all related customers from Sage X3 DB 200 response is returned. Data transformation into CSV format is done asynchronously. Result files are sent to Hybris hotfolder.
+      - The POST /customers/{ID} resource:
+        - Endpoint accepting customer update notification. Customer {ID} is the only required input. In case if customer is found in Sage DB method returns 200 response. Data related to specified customer is sent to Hybris synchronously.
+      - The POST /orders resource:
+        - Endpoint executing orders import to Hybris. After fetching all related orders from Sage X3 DB 200 response is returned. Data transformation into CSV format is done asynchronously. Result files are sent to Hybris hotfolder.
+      - The POST /orders/{ORDER_NUMBER} resource:
+        - Endpoint accepting order update notification. Order {ORDER_NUMBER} is the only required input. In case if order is found in Sage DB method returns 200 response. Data related to specified order is sent to Hybris synchronously
+      - The POST /orders/customer/{CUSTOMER_NUMBER} resource:
+        - Endpoint executing customer orders import to Hybris. After fetching all related orders from Sage X3 DB 200 response is returned. Data transformation into CSV format is done asynchronously. Result files are sent to Hybris hotfolder.
+      - The POST /quotes resource:
+        - Endpoint executing quotes import to Hybris. After fetching all related quotes from Sage X3 DB 200 response is returned. Data transformation into CSV format is done asynchronously. Result files are sent to Hybris hotfolder.
+      - The POST /quotes/{QUOTE_NUMBER} resource:
+        - Endpoint accepting quote update notification. Quote {QUOTE_NUMBER} is the only required input. In case if quote is found in Sage DB method returns 200 response. Data related to specified quote is sent to Hybris synchronously
+      - The POST /quotes/create resource:
+        - Creates a quote in Sage using Sage Base API endpoint
+
+/watermark/{TYPE}:
+  get:
+    responses:
+      200:
+        description: Success response
+        body:
+          application/json:
+            example:
+              message: Success
+  post:
+    responses:
+      200:
+        description: Success response
+        body:
+          application/json:
+            example:
+              message: Success
+
+
+/products:
+  post:
+    displayName: Initiate Products import to Hybris
+    description: Endpoint executing products import to Hybris. After fetching all related products from Sage X3 DB 200 response is returned. Data transformation into CSV format is done asynchronously. Result files are sent to Hybris hotfolder.
+    responses:
+      200:
+        description: Success response
+        body:
+          application/json:
+            example:
+              message: Process initiated (not really)
+      500:
+        description: Internal Server Error
+        body:
+          application/json:
+            example:
+              message:
+                message: Internal Server Error
+                description: Connection refused
+  /{ID}:
+    post:
+      displayName: Product updated notification
+      description: Endpoint accepting product update notification. Product {ID} is the only required input. In case if product is found in Sage DB method returns 200 response. Data related to specified product is sent to Hybris synchronously.
+      responses:
+        200:
+          description: Success response
+          body:
+            application/json:
+              example:
+                message: Product is updated in Hybris
+        404:
+          description: Product not found
+          body:
+            application/json:
+              example:
+                message: Product not found (not really)
+        500:
+          description: Internal Server Error
+          body:
+            application/json:
+              example:
+                message:
+                  message: Internal Server Error
+                  description: Connection refused
+
+/prices:
+  post:
+    displayName: Real-time Prices Request
+    description: Return prices with discounts for specified products. Data is fetched from Sage API
+    body:
+      application/json:
+        type: !include datatypes/PriceRequest.raml
+    responses:
+      200:
+        description: Success response
+        body:
+          application/json:
+            type: !include datatypes/PriceResponse.raml
+            example: !include examples/ProductPriceResponseExample.raml
+      500:
+        description: Internal Server Error
+        body:
+          application/json:
+            example:
+              message:
+                message: Internal Server Error
+                description: Connection refused
+
+/invoices:
+  post:
+    displayName: Initiate Invoices import to Hybris
+    description: Endpoint executing invoices import to Hybris. After fetching all related prices from Sage X3 DB 200 response is returned. Data transformation into CSV format is done asynchronously. Result files are sent to Hybris hotfolder.
+    responses:
+      200:
+        description: Success response
+        body:
+          application/json:
+            example:
+              message: Process initiated (not really)
+      500:
+        description: Internal Server Error
+        body:
+          application/json:
+            example:
+              message:
+                message: Internal Server Error
+                description: Connection refused
+
+/quotes:
+  post:
+    displayName: Initiate Quotes import to Hybris
+    description: Endpoint executing quotes import to Hybris. After fetching all related quotes from Sage X3 DB 200 response is returned. Data transformation into CSV format is done asynchronously. Result files are sent to Hybris hotfolder.
+    responses:
+      200:
+        description: Success response
+        body:
+          application/json:
+            example:
+              message: Process initiated (not really)
+      500:
+        description: Internal Server Error
+        body:
+          application/json:
+            example:
+              message:
+                message: Internal Server Error
+                description: Connection refused
+  /{QUOTE_NUMBER}:
+    post:
+      displayName: Quote updated notification
+      description: Endpoint accepting quote update notification. Quote {QUOTE_NUMBER} is the only required input. In case if quote is found in Sage DB method returns 200 response. Data related to specified quote is sent to Hybris synchronously.
+      responses:
+        200:
+          description: Success response
+          body:
+            application/json:
+              example:
+                message: Quote CSV files are sent to Hybris (not really)
+        404:
+          description: Quote not found
+          body:
+            application/json:
+              example:
+                message: Order not found (not really)
+        500:
+          description: Internal Server Error
+          body:
+            application/json:
+              example:
+                message:
+                  message: Internal Server Error
+                  description: Connection refused
+  /create:
+    post:
+      displayName: Create a quote in Sage
+      description: Creates a quote in Sage using Sage Base API endpoint
+      body:
+        application/json:
+          type: !include datatypes/Quote.raml
+      responses:
+        200:
+          description: Success response
+          body:
+            application/json:
+              example:
+                message: Quote created (not really)
+        500:
+          description: Internal Server Error
+          body:
+            application/json:
+              example:
+                message:
+                  message: Internal Server Error
+                  description: Connection refused
+
+/contacts:
+  post:
+    displayName: Initiate Contacts import to Hybris
+    description: Endpoint executing Contacts import to Hybris. After fetching all Contacts from Sage X3 DB 200 response is returned. Data transformation into CSV format is done asynchronously. Result files are sent to Hybris hotfolder.
+    responses:
+      200:
+        description: Success response
+        body:
+          application/json:
+            example:
+              message: Process initiated (not really)
+      500:
+        description: Internal Server Error
+        body:
+          application/json:
+            example:
+              message:
+                message: Internal Server Error
+                description: Connection refused
+  /{CODE}:
+      post:
+        displayName: Contact updated notification
+        description: Endpoint accepting contact update notification. Contact {CODE} is the only required input. In case if contact is found in Sage DB method returns 200 response. Data related to specified customer is sent to Hybris synchronously.
+        responses:
+          200:
+            description: Success response
+            body:
+              application/json:
+                example:
+                  message: Contact is updated in Hybris
+          404:
+            description: Customer not found
+            body:
+              application/json:
+                example:
+                  message: Contact not found (not really)
+          500:
+            description: Internal Server Error
+            body:
+              application/json:
+                example:
+                  message:
+                    message: Internal Server Error
+                    description: Connection refused
+  /register:
+      post:
+        displayName: Register or update contact in Sage, HubSpot and SalesForce
+        description: Endpoint accepting contact json payload. If a contact gets successfuly created in external systems 200 response is returned. 500 is returned in case of system error.
+        body:
+          application/json:
+            type: !include datatypes/UserRegistrationForm.raml
+            examples:
+              input: !include examples/UserRegistrationFormExample.raml
+        responses:
+          200:
+            description: Success response contains the external system list with processed IDs
+            body:
+              application/json:
+                example:
+                  salesForceId: 00Q3J000001FfmSUAS
+                  sageId: 000000000019413
+                  hubSpotId: 49480551
+          500:
+            description: Internal Server Error
+            body:
+              application/json:
+                example:
+                  message:
+                    message: Internal Server Error
+                    description: Connection refused
+
+/customers:
+  post:
+    displayName: Initiate Customers import to Hybris
+    description: Endpoint executing customers import to Hybris. After fetching all related customers from Sage X3 DB 200 response is returned. Data transformation into CSV format is done asynchronously. Result files are sent to Hybris hotfolder.
+    responses:
+      200:
+        description: Success response
+        body:
+          application/json:
+            example:
+              message: Process initiated (not really)
+      500:
+        description: Internal Server Error
+        body:
+          application/json:
+            example:
+              message:
+                message: Internal Server Error
+                description: Connection refused
+  /{ID}:
+    post:
+      displayName: Customer updated notification
+      description: Endpoint accepting customer update notification. Customer {ID} is the only required input. In case if customer is found in Sage DB method returns 200 response. Data related to specified customer is sent to Hybris synchronously.
+      responses:
+        200:
+          description: Success response
+          body:
+            application/json:
+              example:
+                message: Customer is updated in Hybris
+        404:
+          description: Customer not found
+          body:
+            application/json:
+              example:
+                message: Customer not found (not really)
+        500:
+          description: Internal Server Error
+          body:
+            application/json:
+              example:
+                message:
+                  message: Internal Server Error
+                  description: Connection refused
+
+/orders:
+  post:
+    displayName: Initiate Orders import to Hybris
+    description: Endpoint executing orders import to Hybris. After fetching all related orders from Sage X3 DB 200 response is returned. Data transformation into CSV format is done asynchronously. Result files are sent to Hybris hotfolder.
+    responses:
+      200:
+        description: Success response
+        body:
+          application/json:
+            example:
+              message: Process initiated (not really)
+      500:
+        description: Internal Server Error
+        body:
+          application/json:
+            example:
+              message:
+                message: Internal Server Error
+                description: Connection refused
+  /customer/{CUSTOMER_NUMBER}:
+    post:
+      displayName: Initiate Customer Orders import to Hybris
+      description: Endpoint executing customer orders import to Hybris. After fetching all related orders from Sage X3 DB 200 response is returned. Data transformation into CSV format is done asynchronously. Result files are sent to Hybris hotfolder.
+      responses:
+        200:
+          description: Success response
+          body:
+            application/json:
+              example:
+                message: Order CSV files are sent to Hybris (not really)
+        404:
+          description: Customer not found
+          body:
+            application/json:
+              example:
+                message: Order not found (not really)
+        500:
+          description: Internal Server Error
+          body:
+            application/json:
+              example:
+                message:
+                  message: Internal Server Error
+                  description: Connection refused
+  /{ORDER_NUMBER}:
+    delete:
+      displayName: Remove Order in Hybris
+      description: Endpoint removes Order in Hybris synchronously
+      responses:
+        200:
+          description: Success response
+          body:
+            application/json:
+              example:
+                message: Order removed in Hybris (not really)
+    post:
+      displayName: Order updated notification
+      description: Endpoint accepting order update notification. Order {ORDER_NUMBER} is the only required input. In case if order is found in Sage DB method returns 200 response. Data related to specified order is sent to Hybris synchronously.
+      responses:
+        200:
+          description: Success response
+          body:
+            application/json:
+              example:
+                message: Order CSV files are sent to Hybris (not really)
+        404:
+          description: Customer not found
+          body:
+            application/json:
+              example:
+                message: Order not found (not really)
+        500:
+          description: Internal Server Error
+          body:
+            application/json:
+              example:
+                message:
+                  message: Internal Server Error
+                  description: Connection refused
+    /{LINE_NUMBER}:
+      delete:
+        displayName: Remove Order Line in Hybris
+        description: Endpoint removes Order Line in Hybris synchronously
+        responses:
+          200:
+            description: Success response
+            body:
+              application/json:
+                example:
+                  message: Order Line removed in Hybris (not really)
+
+/status/{type}:
+  get:
+    displayName: Check update status of an object of {type}.
+    description: Check update status of an object of {type}. {type} is one of product|customer|order|shipment.
+    queryParameters:
+      key:
+        description: Key of an updated object
+    responses:
+      200:
+        description: Success response
+        body:
+          application/json:
+            example:
+              message: Success
+
+
+/logger:
+  post:
+    responses:
+      200:
+        description: Success response
+        body:
+          application/json:
+            example:
+              message: Success
